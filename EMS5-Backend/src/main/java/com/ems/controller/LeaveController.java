@@ -18,17 +18,21 @@ public class LeaveController {
     @Autowired
     private LeaveService leaveService;
 
-    @PostMapping("post")
+    @PostMapping("/post")
     public ResponseEntity<LeaveEntity> createRequest(@RequestBody LeaveDto leaveDto) {
         LeaveEntity newRequest = leaveService.createRequest(leaveDto);
         return ResponseEntity.ok(newRequest);
     }
 
-    @GetMapping("get")
+    
+    
+    @GetMapping("/get")
     public ResponseEntity<List<LeaveEntity>> getAllRequests() {
         List<LeaveEntity> requests = leaveService.getAllRequests();
         return ResponseEntity.ok(requests);
     }
+    
+    
 
     @GetMapping("/{id}")
     public ResponseEntity<LeaveEntity> getRequestById(@PathVariable Long id) {
