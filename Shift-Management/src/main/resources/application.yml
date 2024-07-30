@@ -1,0 +1,21 @@
+server:
+  port: 7071
+spring:
+  application:
+    name: Shift-Management
+
+    
+  datasource.url: jdbc:mysql://localhost:3306/shift
+  datasource.username: samardhan
+  datasource.password: samardhan
+  datasource.driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
+    
+  jackson:
+    serialization:
+      fail-on-empty-beans: FALSE
