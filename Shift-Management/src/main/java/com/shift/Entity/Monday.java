@@ -14,6 +14,7 @@ public class Monday {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long mon_id;
 
+	//this is entity class
 	private Time shiftStartTime;
 
 	private Time shiftEndTime;
