@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/location")
+@CrossOrigin(origins = "*")
 public class LocationController {
 
 	@Autowired
@@ -157,7 +159,7 @@ public class LocationController {
 
 		Map<String, Object> response = new HashMap<>();
 		response.put("message", "employee with ID - " + id);
-		response.put("employee", employeeService.getEmployeeById(id));
+		response.put("employee", employeeService.getEmployeeByIds(id));
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 

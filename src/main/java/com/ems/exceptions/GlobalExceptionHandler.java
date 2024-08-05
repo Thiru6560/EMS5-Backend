@@ -35,6 +35,17 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(EmptyFieldException.class)
+	public ResponseEntity<Map<String, Object>> handleEmptyFieldException(EmptyFieldException e) {
+
+		Map<String, Object> errorDetails = new HashMap<>();
+
+		errorDetails.put("message", e.getMessage());
+		errorDetails.put("status", HttpStatus.NO_CONTENT.value());
+
+		return new ResponseEntity<>(errorDetails, HttpStatus.OK);
+	}
 
 	@ExceptionHandler(UnauthorizedException.class)
 	public ResponseEntity<Map<String, Object>> handleUnauthorizedException(UnauthorizedException e) {

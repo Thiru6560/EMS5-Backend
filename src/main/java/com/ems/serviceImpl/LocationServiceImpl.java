@@ -14,6 +14,7 @@ import com.ems.dto.LocationDTO;
 import com.ems.entity.Employee;
 import com.ems.entity.Location;
 import com.ems.exceptions.DuplicateDataException;
+import com.ems.exceptions.EmptyFieldException;
 import com.ems.exceptions.NoLocationFoundException;
 import com.ems.exceptions.NoSuchUserException;
 import com.ems.repository.EmployeeRepository;
@@ -29,27 +30,38 @@ public class LocationServiceImpl implements LocationService {
 	@Autowired
 	private LocationRepository locationRepository;
 
+	
 	public String checkLocation(Long id, LatLon latlon) {
 
-		Employee employeeById = getEmployeeById(id);
+	    Employee employeeById = getEmployeeById(id);
+	    Location location = employeeById.getLocation();
 
-		if (!employeeById.getLocation().getHomeLatitude().equals(latlon.getLat())
-				|| !employeeById.getLocation().getHomeLongitude().equals(latlon.getLon())) {
+	    if (location == null) {
+	        throw new EmptyFieldException("Location data is missing for the employee");
+	    }
 
-			if (!employeeById.getLocation().getOfficeLatitude().equals(latlon.getLat())
-					|| !employeeById.getLocation().getOfficeLongitude().equals(latlon.getLon())) {
-				throw new NoLocationFoundException("Loction Not Matched");
-			}
+	    boolean officeLocationMissing = location.getOfficeLatitude() == null || location.getOfficeLongitude() == null;
+	    boolean homeLocationMissing = location.getHomeLatitude() == null || location.getHomeLongitude() == null;
 
-		}
+	    if (officeLocationMissing && homeLocationMissing) {
+	        throw new EmptyFieldException("Both Office and Home Locations are Empty");
+	    }
 
-		if (employeeById.getLocation().getOfficeLatitude().equals(latlon.getLat())
-				&& employeeById.getLocation().getOfficeLongitude().equals(latlon.getLon())) {
-			return "OFFICE";
-		}
+	    if (location.getOfficeLatitude() != null && location.getOfficeLongitude() != null &&
+	        location.getOfficeLatitude().equals(latlon.getLat()) &&
+	        location.getOfficeLongitude().equals(latlon.getLon())) {
+	        return "OFFICE";
+	    }
 
-		return "HOME";
+	    if (location.getHomeLatitude() != null && location.getHomeLongitude() != null &&
+	        location.getHomeLatitude().equals(latlon.getLat()) &&
+	        location.getHomeLongitude().equals(latlon.getLon())) {
+	        return "HOME";
+	    }
+
+	    throw new NoLocationFoundException("Location Not Matched");
 	}
+
 
 	public EmployeeDTO saveEmployeeLocation(EmployeeDTO employeeDTO) {
 
@@ -129,6 +141,17 @@ public class LocationServiceImpl implements LocationService {
 		return byId.get();
 	}
 
+	public EmployeeDTO getEmployeeByIds(Long id) {
+		Optional<Employee> byId = employeeRepository.findById(id);
+
+		if (byId.isEmpty()) {
+			throw new NoSuchUserException("No User Found With ID - " + id);
+		}
+
+		return convertDaotoDto(byId.get());
+	}
+
+	
 	@Override
 	public List<EmployeeDTO> getAllEmployees() {
 		List<Employee> all = employeeRepository.findAll();
@@ -155,11 +178,11 @@ public class LocationServiceImpl implements LocationService {
 		employee.setRole(employeeDTO.getRole());
 
 		Location location = new Location();
-		location.setHomeLatitude(employeeDTO.getHomeLocation().getLatitude());
-		location.setHomeLongitude(employeeDTO.getHomeLocation().getLongitude());
+		location.setHomeLatitude(Double.parseDouble(employeeDTO.getHomeLocation().getLatitude()));
+		location.setHomeLongitude(Double.parseDouble(employeeDTO.getHomeLocation().getLongitude()));
 
-		location.setOfficeLatitude(employeeDTO.getOfficeLocation().getLatitude());
-		location.setOfficeLongitude(employeeDTO.getOfficeLocation().getLongitude());
+		location.setOfficeLatitude(Double.parseDouble(employeeDTO.getOfficeLocation().getLatitude()));
+		location.setOfficeLongitude(Double.parseDouble(employeeDTO.getOfficeLocation().getLongitude()));
 
 		employee.setLocation(location);
 
@@ -173,13 +196,13 @@ public class LocationServiceImpl implements LocationService {
 		employeeDto.setName(employee.getName());
 		employeeDto.setRole(employee.getRole());
 		LocationDTO home = new LocationDTO();
-		home.setLatitude(employee.getLocation().getHomeLatitude());
-		home.setLongitude(employee.getLocation().getHomeLongitude());
+		home.setLatitude(employee.getLocation().getHomeLatitude()!=null?employee.getLocation().getHomeLatitude().toString():"This Field is Empty");
+		home.setLongitude(employee.getLocation().getHomeLongitude()!=null?employee.getLocation().getHomeLongitude().toString():"This Field is Empty");
 		home.setType("HOME");
 
 		LocationDTO office = new LocationDTO();
-		office.setLatitude(employee.getLocation().getOfficeLatitude());
-		office.setLongitude(employee.getLocation().getOfficeLongitude());
+		office.setLatitude(employee.getLocation().getOfficeLatitude()!=null?employee.getLocation().getOfficeLatitude().toString():"This Field is Empty");
+		office.setLongitude(employee.getLocation().getOfficeLongitude()!=null?employee.getLocation().getOfficeLongitude().toString():"This Field is Empty");
 		office.setType("OFFICE");
 		employeeDto.setHomeLocation(home);
 		employeeDto.setOfficeLocation(office);

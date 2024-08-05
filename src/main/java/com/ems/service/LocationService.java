@@ -28,6 +28,9 @@ public interface LocationService {
 	
 	public Employee getEmployeeById(Long id);
 
+	public EmployeeDTO getEmployeeByIds(Long id);
+
+
 	public Employee convertDtotoDao(EmployeeDTO employeeDTO);
 
 	public EmployeeDTO convertDaotoDto(Employee employee);
