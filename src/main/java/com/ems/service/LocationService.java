@@ -14,6 +14,8 @@ public interface LocationService {
 
 	public String checkLocation(Long id,LatLon latlon);
 	
+	public EmployeeDTO assignShift(Long employeeId, String shiftId);
+	
 	public EmployeeDTO saveEmployeeLocation(EmployeeDTO employeeDto);
 
 	public EmployeeDTO updateHomeLocation(Long id,LatLon latlng);

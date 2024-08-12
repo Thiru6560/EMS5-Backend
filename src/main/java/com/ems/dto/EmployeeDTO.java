@@ -1,7 +1,6 @@
 package com.ems.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public class EmployeeDTO {
 

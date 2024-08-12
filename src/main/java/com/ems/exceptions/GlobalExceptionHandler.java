@@ -78,7 +78,7 @@ public class GlobalExceptionHandler {
 		errorDetails.put("status", HttpStatus.NOT_FOUND.value());
 		System.out.println(e.getMessage() + "------");
 
-		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorDetails, HttpStatus.OK);
 	}
 
 	@ExceptionHandler(NoLocationFoundException.class)
@@ -90,7 +90,7 @@ public class GlobalExceptionHandler {
 		errorDetails.put("status", HttpStatus.NOT_FOUND.value());
 		System.out.println(e.getMessage() + "------");
 
-		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(errorDetails, HttpStatus.OK);
 	}
 
 }

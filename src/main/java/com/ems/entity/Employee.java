@@ -1,6 +1,7 @@
 package com.ems.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,7 +15,7 @@ public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String name;
 
 	private String role;
@@ -22,6 +23,9 @@ public class Employee {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "location_id", referencedColumnName = "locationId")
 	private Location location;
+
+	@Column(name = "shift_id")
+	private String shiftId;
 
 	public Long getId() {
 		return id;
@@ -55,12 +59,21 @@ public class Employee {
 		this.location = location;
 	}
 
-	public Employee(Long id, String name, String role, Location location) {
+	public String getShiftId() {
+		return shiftId;
+	}
+
+	public void setShiftId(String shiftId) {
+		this.shiftId = shiftId;
+	}
+
+	public Employee(Long id, String name, String role, Location location, String shiftId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.role = role;
 		this.location = location;
+		this.shiftId = shiftId;
 	}
 
 	public Employee() {

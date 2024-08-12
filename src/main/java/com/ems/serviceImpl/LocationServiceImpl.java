@@ -31,6 +31,17 @@ public class LocationServiceImpl implements LocationService {
 	private LocationRepository locationRepository;
 
 	
+
+	@Transactional
+	public EmployeeDTO assignShift(Long employeeId, String shiftId) {
+		
+		Employee employeeById = getEmployeeById(employeeId);
+		
+		employeeById.setShiftId(shiftId);
+		
+		return convertDaotoDto(employeeById);
+	}
+	
 	public String checkLocation(Long id, LatLon latlon) {
 
 	    Employee employeeById = getEmployeeById(id);
